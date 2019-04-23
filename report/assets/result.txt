@@ -1,0 +1,15 @@
+# alternating_least_squares_solve
+[iterations] start
+[iterations] took 298.56s, 17 iterations, error=696.27798
+
+# alternating_least_squares_nnls
+[iterations] start
+[iterations] took 851.58s, 43 iterations, error=697.67526
+
+# alternating_least_squares_lstsq
+[iterations] start
+[iterations] took 232.73s, 12 iterations, error=695.80316
+
+# multiplicative_update_rule
+[iterations] start
+[iterations] took 1050.85s, 54 iterations, error=698.33218
