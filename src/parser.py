@@ -1,20 +1,22 @@
 from nltk.corpus import stopwords
+from nltk.stem.snowball import SnowballStemmer
 from string import punctuation
 from scipy.sparse import coo_matrix
 
-import Stemmer as st
 import re
 import math as ma
 
 
-stem = st.Stemmer('russian')
-russian_stopwords = stopwords.words('russian')
+LANGUAGE = 'russian'
+
+stemmer = SnowballStemmer(LANGUAGE)
+russian_stopwords = stopwords.words(LANGUAGE)
 flatten = lambda l: [item for sublist in l for item in sublist]
 
 
 def __preprocess_text(text):
   words = re.split('\W+', text.lower())
-  stemmed = stem.stemWords(words)
+  stemmed = [stemmer.stem(w) for w in words]
 
   tokens = [token for token in stemmed
     if token not in russian_stopwords
@@ -35,11 +37,13 @@ def __get_frequency_dictionary(text):
 
 
 def get_weighted_term_document_matrix(documents):
+  # compute all temr-count distionaries
   documents_dictionaries = [
     __get_frequency_dictionary(document)
     for document in documents
   ]
 
+  # gather all temrs from all documents
   all_terms = list(set(flatten([
     document.keys()
     for document in documents_dictionaries
@@ -50,7 +54,7 @@ def get_weighted_term_document_matrix(documents):
   shape = documents_count, terms_count
 
   frequency_table = [
-    (all_terms.index(term), document_index, count)
+    (document_index, all_terms.index(term), count)
     for document_index, dictionary in enumerate(documents_dictionaries)
     for term, count in dictionary.items()
   ]
@@ -68,6 +72,7 @@ def get_weighted_term_document_matrix(documents):
     for i, j, count in frequency_table
   ]
 
-  data, i, j = zip(*table)
+  i, j, data = zip(*table)
+  matrix = coo_matrix((data, (i, j)), shape)
 
-  return coo_matrix((data, (i, j)), shape).tocsr()
+  return matrix
