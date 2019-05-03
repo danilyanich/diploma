@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.sparse.linalg as slg
-import multiprocessing as mp
 import itertools as it
 import time as tm
 
@@ -14,19 +13,16 @@ def initialize_random(m, n, RANK_K):
 
 def __pool_map(zipped):
   i, j, v, W, H = zipped
-  return abs(v - W[i, :] @ H[:, j])
+  return
 
 
 def __relative_error(A, W, H):
   cx = A.tocoo()
 
-  pool_count = mp.cpu_count() - 1
-  with mp.Pool(pool_count) as pool:
-    zipped = zip(cx.row, cx.col, cx.data, it.repeat(W), it.repeat(H))
-    norm = sum(pool.map(__pool_map, zipped))
+  zipped = zip(cx.row, cx.col, cx.data)
+  norm = sum(abs(v - W[i, :] @ H[:, j]) for i, j, v in zipped)
 
-    return norm / slg.norm(A)
-  pass
+  return norm / slg.norm(A)
 
 
 def iterate(generator, A, EPS):
