@@ -41,9 +41,10 @@ def alternating_least_squares_nnls(A, W, H):
 
   while True:
     H = __nnls(W.T @ W, W.T @ A)
+    H = __non_negative(H)
 
     WT = __nnls(H @ H.T, H @ A.T)
-    W = WT.T
+    W = __non_negative(WT.T)
 
     yield W, H
 
@@ -59,9 +60,10 @@ def alternating_least_squares_lstsq(A, W, H):
   while True:
     # W H = A
     H = __lstsq(W.T @ W, W.T @ A)
+    H = __non_negative(H)
 
     # H' W' = A'
     WT = __lstsq(H @ H.T, H @ A.T)
-    W = WT.T
+    W = __non_negative(WT.T)
 
     yield W, H
