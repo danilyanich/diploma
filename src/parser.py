@@ -75,4 +75,4 @@ def get_weighted_term_document_matrix(documents):
   i, j, data = zip(*table)
   matrix = coo_matrix((data, (i, j)), shape)
 
-  return matrix
+  return matrix, all_terms

@@ -1,1 +1,3 @@
-# diploma
+# Diploma
+
+Nonnegative matrix factorization
