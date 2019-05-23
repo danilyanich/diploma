@@ -67,6 +67,7 @@ def get_weighted_term_document_matrix(documents):
   ]
 
   print()
+  print()
 
   # Gather all temrs from all documents
   all_terms = list(set(__flatten([
@@ -74,6 +75,7 @@ def get_weighted_term_document_matrix(documents):
     for document in ut.get_list_progress(documents_dictionaries, 'Gathering all terms')
   ])))
 
+  print()
   print()
 
   documents_count = len(documents)
@@ -88,6 +90,7 @@ def get_weighted_term_document_matrix(documents):
   ]
 
   print()
+  print()
 
   # For each term count the number of documents in which it is contained
   inverse_document_frequency = [
@@ -98,6 +101,7 @@ def get_weighted_term_document_matrix(documents):
     for term in ut.get_list_progress(all_terms, 'Computing document-term frequency')
   ]
 
+  print()
   print()
 
   # Apply weights to generated table
