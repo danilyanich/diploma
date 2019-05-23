@@ -4,7 +4,6 @@ from scipy.sparse import coo_matrix
 
 import re
 import math as ma
-import utils as ut
 import collections as cl
 import argparse
 import pickle
@@ -109,3 +108,38 @@ def get_weighted_term_document_matrix(documents_dictionaries):
   matrix = coo_matrix((data, (i, j)), shape)
 
   return matrix, all_terms
+
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('input', default=None)
+parser.add_argument('--lang', default='russian')
+parser.add_argument('--out', default=None)
+
+
+if __name__ == '__main__':
+  args = parser.parse_args()
+
+  in_file_path = args.input
+  text_language = args.lang
+  out_file_path = args.out
+
+  in_file = open(in_file_path, mode='r+') if in_file_path else sys.stdin
+  out_file = open(out_file_path, mode='wb+') if out_file_path else sys.stdout.buffer
+
+  preprocessing_info = (SnowballStemmer(text_language), sw.words(text_language) )
+
+
+  sentences = get_sentences(in_file.read())
+  tokenized = [tokenize_text(sentence, preprocessing_info) for sentence in sentences]
+  frequency_dictionaries = [get_frequency_dictionary(tokens) for tokens in tokenized]
+  A, terms = get_weighted_term_document_matrix(frequency_dictionaries)
+
+
+  pickle.dumps({
+    'matrix': A,
+    'terms': terms,
+    'sentences': sentences,
+  }, out_file)
+
+  pass
