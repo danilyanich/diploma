@@ -1,0 +1,23 @@
+{
+  "name": "nmf",
+  "version": "1.0.0",
+  "description": "Nonnegative matrix factorization",
+  "main": "src/main.py",
+  "scripts": {
+    "__setup-venv": "python3 -m venv .venv",
+    "__install-modules": ".venv/bin/pip install --requirement requirements.txt",
+    "postinstall": "npm run __setup-venv && npm run __install-modules",
+    "test": ".venv/bin/python src/test.py",
+    "start": ".venv/bin/python src/main.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilyanich/diploma.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danilyanich/diploma/issues"
+  },
+  "homepage": "https://github.com/danilyanich/diploma#readme"
+}
