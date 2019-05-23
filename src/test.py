@@ -46,14 +46,14 @@ def __test_on_file(test_file):
 
   for name, generator in methods.items():
     try:
-      result, errors = ut.iterate(
+      _, errors = ut.iterate(
         generator,
         matrix=A,
         precision=EPS,
         method_name=name
       )
 
-      results[name] = result, errors
+      results[name] = errors
 
       if errors[-1] < error:
         error = errors[-1]
