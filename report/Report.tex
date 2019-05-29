@@ -1,42 +1,68 @@
+% !TEX program = xelatex
+
 \documentclass[14pt]{extarticle}
 \usepackage[utf8x]{inputenc}
 \usepackage[english,russian]{babel}
 \usepackage{indentfirst}
 \usepackage{graphicx}
-\usepackage{verbatim}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{longtable}
-\usepackage[a4paper,margin=1.0in,footskip=0.25in]{geometry}
 
+
+% Set line spacing
+\usepackage{leading}
+\leading{18pt}
+
+
+% Set font
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+
+% Set paper size and margins
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	top=2cm,
+	bottom=2cm,
+	left=3cm,
+	right=1cm,
+	bindingoffset=0cm,
+}
+
+
+% Package for code blocks
+\usepackage{verbatim}
 \makeatletter
-
-% font for verbatim package
 \newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
 
+
 \author{Даниил Крачковский}
-\title{Отчёт по дипломной практике}
+\title{Дипломная работа}
+
 
 % Change table of contents title
 % \addto\captionsrussian{\renewcommand{\contentsname}{Оглавление}}
 
+
 \begin{document}
 
-\input{sections/0_Titlepage.tex}
+	\input{sections/0_Titlepage.tex}
 
-\tableofcontents{}
+	\tableofcontents{}
 
-\input{sections/1_Introduction.tex}
-\input{sections/2_Problem.tex}
-\input{sections/3_Application.tex}
-\input{sections/4_Experiment.tex}
-\input{sections/5_Conclusion.tex}
+	\input{sections/1_Introduction.tex}
+	\input{sections/2_Problem.tex}
+	\input{sections/3_Application.tex}
+	\input{sections/4_Experiment.tex}
+	\input{sections/5_Conclusion.tex}
 
-\begin{thebibliography}{9}
-	\bibitem{berry} Michael W. Berry, Murray Browne, Amy N. Langville, V. Paul Pauca, Robert J. Plemmons, Algorithms and applications for approximate nonnegative matrix factorization, Computational Statistics; Data Analysis, Volume 52, Issue 1, 2007, p. 155-173.
-	\bibitem{elden} Lars Eldén. 2007. Matrix Methods in Data Mining and Pattern Recognition (Fundamentals of Algorithms). Soc. for Industrial and Applied Math., Philadelphia, PA, USA.
-	\bibitem{demmel} Деммель Дж. Вычислительная линейная алгебра. М.: Мир, 2001.
-	\bibitem{habr} Интернет ресурс 'Habr'. https://habr.com/ru/post/264375/
-\end{thebibliography}
+	\begin{thebibliography}{9}
+		\bibitem{berry} Michael W. Berry, Murray Browne, Amy N. Langville, V. Paul Pauca, Robert J. Plemmons, Algorithms and applications for approximate nonnegative matrix factorization, Computational Statistics; Data Analysis, Volume 52, Issue 1, 2007, p. 155-173.
+		\bibitem{elden} Lars Eldén. 2007. Matrix Methods in Data Mining and Pattern Recognition (Fundamentals of Algorithms). Soc. for Industrial and Applied Math., Philadelphia, PA, USA.
+		\bibitem{demmel} Деммель Дж. Вычислительная линейная алгебра. М.: Мир, 2001.
+		\bibitem{habr} Интернет ресурс 'Habr'. https://habr.com/ru/post/264375/
+	\end{thebibliography}
 
 \end{document}
