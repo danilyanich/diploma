@@ -91,3 +91,15 @@
   {\parindent}
   {*0.5}
   {*0}
+
+
+\usepackage{caption}
+\AtBeginDocument{
+  \def\contentsname{Оглавление}
+  \def\bibname{Список использованной литературы}
+  \renewcommand{\figurename}{Рисунок}
+  \renewcommand{\tablename}{Таблица}
+  \renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+  \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+  \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+}
