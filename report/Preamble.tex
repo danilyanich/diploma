@@ -1,0 +1,93 @@
+\documentclass[14pt]{extreport}
+\usepackage[utf8x]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{longtable}
+
+
+\author{Даниил Крачковский}
+\title{Дипломная работа}
+
+
+% Set line spacing
+\usepackage{leading}
+\leading{18pt}
+
+
+% Set font
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+
+% Set paper size and margins
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	top=2cm,
+	bottom=2cm,
+	left=3cm,
+	right=1cm,
+	bindingoffset=0cm,
+}
+
+
+% Package for code blocks
+\usepackage{verbatim}
+\makeatletter
+\newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
+
+
+% Change parts styling
+\usepackage{titlesec}
+
+\titleformat
+  {\chapter}
+  [display]
+  {\centering\fontsize{16pt}{0em}\bfseries}
+  {ГЛАВА \thechapter}
+  {1em}
+  {\MakeUppercase}
+\titlespacing*
+  {\chapter}
+  {0pt}
+  {0pt}
+  {*3}
+
+\titleformat
+  {\section}
+  {\fontsize{16pt}{0em}\bfseries}
+  {\thesection}
+  {1em}
+  {}
+\titlespacing*
+  {\section}
+  {\parindent}
+  {*2}
+  {*1}
+
+\titleformat
+  {\subsection}
+  {\bfseries\normalsize}
+  {\thesubsection}
+  {1em}
+  {}
+\titlespacing*
+  {\subsection}
+  {\parindent}
+  {*2}
+  {*1}
+
+\titleformat
+  {\subsubsection}
+  {\bfseries\normalsize}
+  {\thesubsubsection}
+  {1em}
+  {}
+\titlespacing*
+  {\subsubsection}
+  {\parindent}
+  {*0.5}
+  {*0}
