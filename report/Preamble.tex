@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{longtable}
+\usepackage{dirtytalk}
 
 
 \author{Даниил Крачковский}
@@ -39,6 +40,22 @@
 \makeatletter
 \newcommand{\verbatimfont}[1]{\renewcommand{\verbatim@font}{\ttfamily#1}}
 
+\usepackage{listings}
+\lstset{
+  language=Python,
+  basicstyle=\small\ttfamily,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  frame=lines,
+}
 
 % Change parts styling
 \usepackage{titlesec}
@@ -93,6 +110,7 @@
   {*0}
 
 
+% Change captions of blocks
 \usepackage{caption}
 \AtBeginDocument{
   \def\contentsname{Оглавление}
@@ -103,3 +121,23 @@
   \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
   \renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
 }
+
+
+%Algotihm blocks
+\usepackage[linesnumbered,ruled]{algorithm2e}
+
+% \SetKwInput{KwData}{Исходные параметры}
+% \SetKwInput{KwResult}{Результат}
+% \SetKwInput{KwIn}{Входные данные}
+% \SetKwInput{KwOut}{Выходные данные}
+% \SetKwIF{If}{ElseIf}{Else}{если}{тогда}{иначе если}{иначе}{конец условия}
+% \SetKwFor{While}{до тех пор, пока}{выполнять}{конец цикла}
+% \SetKw{KwTo}{от}
+% \SetKw{KwRet}{возвратить}
+% \SetKw{Return}{возвратить}
+% \SetKwBlock{Begin}{начало блока}{конец блока}
+% \SetKwSwitch{Switch}{Case}{Other}{Проверить значение}{и выполнить}{вариант}{в противном случае}{конец варианта}{конец проверки значений}
+% \SetKwFor{For}{цикл}{выполнять}{конец цикла}
+% \SetKwFor{ForEach}{для каждого}{выполнять}{конец цикла}
+% \SetKwRepeat{Repeat}{повторять}{до тех пор, пока}
+\SetAlgorithmName{Алгоритм}{алгоритм}{Список алгоритмов}
