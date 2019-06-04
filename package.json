@@ -8,7 +8,8 @@
     "__install-modules": ".venv/bin/pip install --requirement requirements.txt",
     "postinstall": "npm run __setup-venv && npm run __install-modules",
     "test": ".venv/bin/python src/test.py",
-    "start": ".venv/bin/python src/main.py"
+    "start": ".venv/bin/python src/main.py",
+    "compile-report": "cd report && xelatex Report.tex"
   },
   "repository": {
     "type": "git",
