@@ -136,7 +136,7 @@ if __name__ == '__main__':
   A, terms = get_weighted_term_document_matrix(frequency_dictionaries)
 
 
-  pickle.dumps({
+  pickle.dump({
     'matrix': A,
     'terms': terms,
     'sentences': sentences,
