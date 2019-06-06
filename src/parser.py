@@ -6,12 +6,9 @@ import re
 import math as ma
 import utils as ut
 import collections as cl
-
-
-LANGUAGE = 'russian'
-
-stemmer = SnowballStemmer(LANGUAGE)
-stopwords = sw.words(LANGUAGE)
+import argparse
+import pickle
+import sys
 
 
 def __flatten(list_of_lists):
@@ -26,8 +23,10 @@ def __flatten(list_of_lists):
   return flat
 
 
-def __preprocess_text(raw_text):
+def tokenize_text(raw_text, preprocessing_info):
   '''Split text into stemmed tokens'''
+
+  stemmer, stopwords = preprocessing_info
 
   # Split text by non letters
   raw_words = re.split('\W+', raw_text.lower())
@@ -43,10 +42,8 @@ def __preprocess_text(raw_text):
   return stemmed
 
 
-def __get_frequency_dictionary(text):
+def get_frequency_dictionary(tokens):
   '''Compute term-frequency dictionary from text'''
-
-  tokens = __preprocess_text(text)
 
   # Transform array into dictionary of occurrences
   dictionary = cl.Counter(tokens)
@@ -54,43 +51,43 @@ def __get_frequency_dictionary(text):
   return dictionary
 
 
-def get_weighted_term_document_matrix(documents):
-  '''Compute weighted term-document matrix'''
+def get_sentences(raw_text):
+  '''Split text into sentences'''
 
-  print('# Generating weighted term-document matrix')
-  print()
+  # Replace spaces, quotes and newlines
+  text = re.sub('[\n" ]+', ' ', raw_text)
 
-  # Compute all temr-count distionaries
-  documents_dictionaries = [
-    __get_frequency_dictionary(document)
-    for document in ut.get_list_progress(documents, 'Building term-count dictinaries')
+  # Split text by punctuation and remove leading whitespaces
+  raw_sentences = [
+    re.sub('^ +', '', s)
+    for s in re.split('[!.?]+ +', text)
   ]
 
-  print()
-  print()
+  # Filter empty sentences
+  sentences = [s for s in raw_sentences if len(s)]
+
+  return sentences
+
+
+def get_weighted_term_document_matrix(documents_dictionaries):
+  '''Compute weighted term-document matrix'''
 
   # Gather all temrs from all documents
   all_terms = list(set(__flatten([
     document.keys()
-    for document in ut.get_list_progress(documents_dictionaries, 'Gathering all terms')
+    for document in documents_dictionaries
   ])))
 
-  print()
-  print()
-
-  documents_count = len(documents)
+  documents_count = len(documents_dictionaries)
   terms_count = len(all_terms)
   shape = terms_count, documents_count
 
   # Merge document dictionaries and all terms into coo_matrix format
   frequency_table = [
     (all_terms.index(term), document_index, count)
-    for document_index, dictionary in enumerate(ut.get_list_progress(documents_dictionaries, 'Merging frequency table'))
+    for document_index, dictionary in enumerate(documents_dictionaries)
     for term, count in dictionary.items()
   ]
-
-  print()
-  print()
 
   # For each term count the number of documents in which it is contained
   inverse_document_frequency = [
@@ -98,20 +95,14 @@ def get_weighted_term_document_matrix(documents):
       dictionary.get(term, 0)
       for dictionary in documents_dictionaries
     )
-    for term in ut.get_list_progress(all_terms, 'Computing document-term frequency')
+    for term in all_terms
   ]
-
-  print()
-  print()
 
   # Apply weights to generated table
   table = [
     (i, j, count * ma.log(documents_count / inverse_document_frequency[i]))
-    for i, j, count in ut.get_list_progress(frequency_table, 'Generating weighted term-document matrix')
+    for i, j, count in frequency_table
   ]
-
-  print()
-  print()
 
   # Pack all data into coo_matrix format
   i, j, data = zip(*table)
