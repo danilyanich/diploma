@@ -3,6 +3,7 @@ import scipy.sparse.linalg as slg
 import itertools as it
 import time as tm
 import re
+import os
 
 
 def initialize_random(m, n, RANK_K):
@@ -55,6 +56,10 @@ def iterate(generator, A, W, H, **kwargs):
     pass
 
   return result, errors
+
+
+def replace_ext(filename, ext):
+  return os.path.splitext(filename)[0]+'.'+ext
 
 
 def get_generator_progress(generator, label):

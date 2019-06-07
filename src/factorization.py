@@ -31,7 +31,7 @@ if __name__ == '__main__':
   precision = args.eps
   decomposition_rank = args.rank
   method_name = args.method
-  out_file_path = args.out
+  out_file_path = args.out if args.out else ut.replace_ext(in_file_path, '{}.{}.factorized'.format(decomposition_rank, method_name))
 
   in_file = open(in_file_path, mode='rb+') if in_file_path else sys.stdin.buffer
   out_file = open(out_file_path, mode='wb+') if out_file_path else sys.stdout.buffer

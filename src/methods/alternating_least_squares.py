@@ -9,8 +9,8 @@ def __non_negative(matrix):
   return matrix.clip(0, None)
 
 
-def __get_col(A, i):
-  return np.asarray(B.getcol(i).todense()).flatten()
+def __get_col(sparse_matrix, index):
+  return np.asarray(sparse_matrix.getcol(index).todense()).flatten()
 
 
 def __solve_by_columns(A, B, solve):
