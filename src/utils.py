@@ -14,70 +14,47 @@ def initialize_random(m, n, RANK_K):
   return W, H
 
 
-def __relative_error(A, W, H):
+def __trace_of_product(A, B):
+  '''Compute efficient trace of matrix multiplication'''
+
+  n, _ = A.shape
+
+  diag = (A[i,:] @ B[:,i] for i in range(n))
+
+  return sum(diag)
+
+
+def __relative_error(A, W, H, trace_AT_A):
   '''Calculate relative error over sparse A matrix'''
 
-  cx = A.tocoo()
+  norm = trace_AT_A - 2 * __trace_of_product(H.T, W.T @ A) + __trace_of_product(H.T, W.T @ W @ H)
+  relative_norm = norm / slg.norm(A)
 
-  zipped = zip(cx.row, cx.col, cx.data)
-  norm = sum(abs(v - W[i, :] @ H[:, j]) for i, j, v in zipped)
-
-  return norm / slg.norm(A)
+  return relative_norm
 
 
-def iterate(generator, **kwargs):
+def iterate(generator, A, W, H, **kwargs):
   '''Iterate over method generator'''
 
-  A = kwargs.get('matrix')
   EPS = kwargs.get('precision')
   label = kwargs.get('method_name')
 
-  errors = []
+  trace_AT_A = (A.T @ A).diagonal().sum()
+
+  errors = [__relative_error(A, W, H, trace_AT_A)]
   result = None
 
-  progress_gen = get_generator_progress(generator, label)
+  progress_gen = generator(A, W, H)
 
   while len(errors) < 2 or abs(errors[-2] - errors[-1]) >= EPS:
     result = next(progress_gen)
 
-    error = __relative_error(A, *result)
+    error = __relative_error(A, *result, trace_AT_A)
+
     errors.append(error)
     pass
 
-  print()
-  print('error {:.5f}'.format(errors[-1]))
-  print()
-
   return result, errors
-
-
-def get_sentences(raw_text):
-  '''Split text into sentences'''
-
-  # Replace spaces, quotes and newlines
-  text = re.sub('[\n" ]+', ' ', raw_text)
-
-  # Split text by punctuation and remove leading whitespaces
-  raw_sentences = [
-    re.sub('^ +', '', s)
-    for s in re.split('[!.?]+ +', text)
-  ]
-
-  # Filter empty sentences
-  sentences = [s for s in raw_sentences if len(s)]
-
-  return sentences
-
-
-def get_list_progress(iterable, label):
-  all_start = tm.process_time()
-  print('> {}'.format(label))
-  length = len(iterable)
-
-  for idx, item in enumerate(iterable):
-    yield item
-    took = tm.process_time() - all_start
-    print('\r[progress] took {:.2f}s, {} of {} done'.format(took, idx + 1, length), end='')
 
 
 def get_generator_progress(generator, label):
