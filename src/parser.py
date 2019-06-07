@@ -8,6 +8,7 @@ import collections as cl
 import argparse
 import pickle
 import sys
+import utils as ut
 
 
 def __flatten(list_of_lists):
@@ -112,7 +113,7 @@ def get_weighted_term_document_matrix(documents_dictionaries):
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('input', default=None)
+parser.add_argument('input')
 parser.add_argument('--lang', default='russian')
 parser.add_argument('--out', default=None)
 
@@ -122,10 +123,10 @@ if __name__ == '__main__':
 
   in_file_path = args.input
   text_language = args.lang
-  out_file_path = args.out
+  out_file_path = args.out if args.out else ut.replace_ext(in_file_path, 'parsed')
 
-  in_file = open(in_file_path, mode='r+') if in_file_path else sys.stdin
-  out_file = open(out_file_path, mode='wb+') if out_file_path else sys.stdout.buffer
+  in_file = open(in_file_path, mode='r+')
+  out_file = open(out_file_path, mode='wb+')
 
   preprocessing_info = (SnowballStemmer(text_language), sw.words(text_language) )
 
