@@ -1,6 +1,6 @@
-from numpy.linalg import solve
-from scipy.optimize import nnls
-from scipy.linalg import lstsq
+from numpy.linalg import solve as lg_solve
+from scipy.optimize import nnls, lsq_linear
+from scipy.sparse.linalg import lsqr
 
 import numpy as np
 
@@ -9,61 +9,70 @@ def __non_negative(matrix):
   return matrix.clip(0, None)
 
 
-def alternating_least_squares_solve(A, W, H):
-  W = W.copy()
-
-  while True:
-    # W' W H = W' A
-    H = solve(W.T @ W, W.T @ A)
-    H = __non_negative(H)
-
-    # H H' W' = H A'
-    WT = solve(H @ H.T, H @ A.T)
-    W = __non_negative(WT.T)
-
-    yield W, H
+def __get_col(A, i):
+  return np.asarray(B.getcol(i).todense()).flatten()
 
 
-# min_X ||AX - B||_2, X >= 0
-def __nnls(A, B):
-  def __nnls__map(b):
-    b = np.asarray(b).flatten()
-
-    x, _ = nnls(A, b)
-    return x
-
-  X = [__nnls__map(B[:, i]) for i in range(B.shape[1])]
+def __solve_by_columns(A, B, solve):
+  _, m = B.shape
+  X = [solve(A, __get_col(B, i)) for i in range(m)]
   return np.array(X).T
 
 
-def alternating_least_squares_nnls(A, W, H):
-  W = W.copy()
+def __nnls(A, b):
+  x, _ = nnls(A, b)
+  return x
+
+
+def __lsqr(A, b):
+  info = lsqr(A, b, show=False)
+  return info[0]
+
+
+def alternating_least_squares(A, W, H, solve_steps):
+  '''Abstract ALS solver'''
+
+  W, H = W.copy(), H.copy()
 
   while True:
-    H = __nnls(W.T @ W, W.T @ A)
-    H = __non_negative(H)
-
-    WT = __nnls(H @ H.T, H @ A.T)
-    W = __non_negative(WT.T)
-
-    yield W, H
+    yield solve_steps(A, W, H)
 
 
-def __lstsq(A, B):
-  X, _, _, _ = lstsq(A, B)
-  return X
+def __solve_norm(A, W, H):
+  '''Solve with normal equations'''
+
+  H = lg_solve(W.T @ W, W.T @ A)
+  H = __non_negative(H)
+
+  W = lg_solve(H @ H.T, H @ A.T).T
+  W = __non_negative(W)
+
+  return W, H
 
 
-def alternating_least_squares_lstsq(A, W, H):
-  W = W.copy()
+def __solve_nnls(A, W, H):
+  '''Solve with nonnegative least squares'''
 
-  while True:
-    # W H = A
-    H = __lstsq(W.T @ W, W.T @ A)
-    H = __non_negative(H)
+  H = __solve_by_columns(W, A, __nnls)
+  W = __solve_by_columns(H.T, A.T, __nnls).T
 
-    # H' W' = A'
-    WT = __lstsq(H @ H.T, H @ A.T)
-    W = __non_negative(WT.T)
+  return W, H
 
-    yield W, H
+
+def __solve_lsqr(A, W, H):
+  '''Solve with least squares'''
+
+  H = __solve_by_columns(W, A, __lsqr)
+  H = __non_negative(H)
+
+  W = __solve_by_columns(H.T, A.T, __lsqr).T
+  W = __non_negative(W)
+
+  return W, H
+
+
+types = {
+  'norm': __solve_norm,
+  'nnls': __solve_nnls,
+  'lsqr': __solve_lsqr,
+}

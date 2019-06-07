@@ -9,9 +9,9 @@ import utils as ut
 
 methods = {
   'MU': mt.multiplicative_update_rule,
-  'ALS_solve': mt.alternating_least_squares_solve,
-  'ALS_lstsq': mt.alternating_least_squares_lstsq,
-  'ALS_nnls': mt.alternating_least_squares_nnls,
+  'ALS_NORM': lambda A, W, H: mt.alternating_least_squares(A, W, H, mt.als_types.get('norm')),
+  'ALS_NNLS': lambda A, W, H: mt.alternating_least_squares(A, W, H, mt.als_types.get('nnls')),
+  'ALS_LSQR': lambda A, W, H: mt.alternating_least_squares(A, W, H, mt.als_types.get('lsqr')),
 }
 
 

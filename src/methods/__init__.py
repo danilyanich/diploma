@@ -1,4 +1,3 @@
-from .alternating_least_squares import alternating_least_squares_solve
-from .alternating_least_squares import alternating_least_squares_nnls
-from .alternating_least_squares import alternating_least_squares_lstsq
+from .alternating_least_squares import alternating_least_squares
+from .alternating_least_squares import types as als_types
 from .multiplicative_update_rule import multiplicative_update_rule
