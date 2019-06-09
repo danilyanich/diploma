@@ -35,7 +35,9 @@ def alternating_least_squares(A, W, H, solve_steps):
   W, H = W.copy(), H.copy()
 
   while True:
-    yield solve_steps(A, W, H)
+    W, H = solve_steps(A, W, H)
+
+    yield W, H
 
 
 def __solve_norm(A, W, H):

@@ -8,7 +8,7 @@ RANK='5'
 
 for file in $FILES; do
   for method in "${METHODS[@]}"; do
-    echo \r $file $method
+    echo $file $method
     bin/factorize $file --eps $PRECISION --rank $RANK --method $method
   done;
 done;
