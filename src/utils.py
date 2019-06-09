@@ -62,6 +62,10 @@ def replace_ext(filename, ext):
   return os.path.splitext(filename)[0]+'.'+ext
 
 
+def get_filename(filename):
+  return os.path.basename(filename).split(os.extsep, 1)[0]
+
+
 def get_generator_progress(generator, label):
   all_start = tm.process_time()
   print('> {}'.format(label))
