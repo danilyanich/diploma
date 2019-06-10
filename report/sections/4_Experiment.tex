@@ -97,7 +97,7 @@ Altenating random takes 1.151e-02s
 Altenating SVD takes 6.742e-03s
 \end{lstlisting}
 
-Ниже приведени результаты алгоритма попеременных наименьших квадратов с использованием SVD инициализации:
+Ниже приведены результаты алгоритма попеременных наименьших квадратов с использованием SVD инициализации:
 
 \begin{align*}
 W H =
@@ -176,28 +176,57 @@ W H =
 
 
 
-\begin{tikzpicture}
-\begin{axis}[
-  axis lines = left,
-  xlabel = Iteration,
-  ylabel = Error,
-  height=10cm, width=16cm, grid=major,
+\begin{tikzpicture}[
+  trim axis left,
+  every mark/.append style={mark size=4pt},
 ]
+  \begin{axis}[
+    axis lines = left,
+    scale only axis,
+    grid = major,
+    title = График сходимости алгоритмов,
+    xlabel = Номер итерации,
+    ylabel = Ошибка,
+    width = 0.9\textwidth,
+    height = 0.7\textwidth,
+    enlarge x limits={0.05},
+    enlarge y limits={0.05},
+    line width=1pt,
+  ]
 
+    \addplot table [
+      x=iteration,
+      y=roadside_picnic.5.ALS_LSQR,
+      col sep=comma,
+      skip coords between index={0}{1},
+    ] {../samples/data.csv};
+    \addlegendentry{ALS\_LSQR}
 
-\addplot table [x=it, y=Alternating least squares (solve), col sep=comma] {./assets/comparison_data.csv};
-\addlegendentry{Alternating least squares (solve)}
+    \addplot table [
+      x=iteration,
+      y=roadside_picnic.5.ALS_NNLS,
+      col sep=comma,
+      skip coords between index={0}{1},
+    ] {../samples/data.csv};
+    \addlegendentry{ALS\_NNLS}
 
-\addplot table [x=it, y=Alternating least squares (lstsq), col sep=comma] {./assets/comparison_data.csv};
-\addlegendentry{Alternating least squares (lstsq)}
+    \addplot table [
+      x=iteration,
+      y=roadside_picnic.5.ALS_NORM,
+      col sep=comma,
+      skip coords between index={0}{1},
+    ] {../samples/data.csv};
+    \addlegendentry{ALS\_NORM}
 
-\addplot table [x=it, y=Alternating least squares (nnls), col sep=comma] {./assets/comparison_data.csv};
-\addlegendentry{Alternating least squares (nnls)}
+    \addplot table [
+      x=iteration,
+      y=roadside_picnic.5.MU,
+      col sep=comma,
+      skip coords between index={0}{1},
+    ] {../samples/data.csv};
+    \addlegendentry{MU}
 
-\addplot table [x=it, y=Multiplicative update rule, col sep=comma] {./assets/comparison_data.csv};
-\addlegendentry{Multiplicative update rule}
-
-\end{axis}
+  \end{axis}
 \end{tikzpicture}
 
 \newpage
