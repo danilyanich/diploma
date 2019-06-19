@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 import sys
 import argparse
+import time
 
 import methods as mt
 import utils as ut
@@ -43,6 +44,7 @@ if __name__ == '__main__':
 
   W, H = ut.initialize_random(*matrix.shape, decomposition_rank)
 
+  start = time.time()
 
   result, errors_trace = ut.iterate(
     method_generator,
@@ -52,6 +54,10 @@ if __name__ == '__main__':
   )
 
   W, H = result
+  elapsed = time.time() - start
+
+
+  print(errors_trace[-1], end='')
 
 
   pickle.dump({
@@ -61,6 +67,7 @@ if __name__ == '__main__':
     'errors_trace': errors_trace,
     'W': W,
     'H': H,
+    'time_elapsed': elapsed,
   }, out_file)
 
   pass
